@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-parcelize")
+    id("kotlin-android")
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.0-RC2"
 }
 
 android {
@@ -49,6 +52,17 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization:1.8.10")
+    implementation("com.nimbusds:nimbus-jose-jwt:9.22")
+    implementation ("org.bouncycastle:bcprov-jdk15on:1.70")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

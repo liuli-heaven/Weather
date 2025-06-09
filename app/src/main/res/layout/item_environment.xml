@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#4EBEFB">
+
+        <TextView
+            android:id="@+id/uvLevelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="紫外线指数 0 最弱"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/progressBar"
+            app:layout_constraintTop_toTopOf="@+id/progressBar"
+            app:layout_constraintVertical_bias="0.75" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
+            android:layout_width="125dp"
+            android:layout_height="116dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:rotation="115"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/preproText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="降水概率 25%"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintStart_toEndOf="@+id/progressBar"
+            app:layout_constraintTop_toTopOf="@+id/progressBar"
+            app:layout_constraintVertical_bias="0.25" />
+
+        <TextView
+            android:id="@+id/rhText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="75%\n空气湿度"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+            app:layout_constraintEnd_toEndOf="@+id/progressBar"
+            app:layout_constraintStart_toStartOf="@+id/progressBar"
+            app:layout_constraintTop_toTopOf="@+id/progressBar" />
+
+        <ImageView
+            android:id="@+id/cloudImage"
+            android:layout_width="127dp"
+            android:layout_height="114dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@android:drawable/ic_lock_lock"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
+
+        <TextView
+            android:id="@+id/cloudcoverText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="@+id/cloudImage"
+            app:layout_constraintStart_toStartOf="@+id/cloudImage"
+            app:layout_constraintTop_toBottomOf="@+id/cloudImage" />
+
+        <TextView
+            android:id="@+id/wsdescText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="风向\t\t\t\t东南风"
+            app:layout_constraintBottom_toBottomOf="@+id/cloudcoverText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cloudImage"
+            app:layout_constraintTop_toTopOf="@+id/cloudImage"
+            app:layout_constraintVertical_bias="0.25" />
+
+        <TextView
+            android:id="@+id/wddescText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="风力\t\t\t\t微风"
+            app:layout_constraintBottom_toBottomOf="@+id/cloudcoverText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cloudImage"
+            app:layout_constraintTop_toTopOf="@+id/cloudImage"
+            app:layout_constraintVertical_bias="0.75" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
