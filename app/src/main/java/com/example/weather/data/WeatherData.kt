@@ -1,5 +1,6 @@
 package com.example.weather.data
 
+import android.annotation.SuppressLint
 import android.content.ClipData.Item
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Serializer
@@ -46,6 +47,7 @@ data class EnvironmentPram(
     val wd_desc: String     //风向
 ) : ItemModel
 
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class SunData(
     val sunrise: String,    //日出时间
@@ -53,23 +55,31 @@ data class SunData(
     val moonphase: String   //月相
 ) : ItemModel
 
+@SuppressLint("UnsafeOptInUsageError")
+@Serializable
+data class WeatherData(val status: Int, val fc_time: String,
+                       val tem_max: Int, val tem_min: Int, val week: String, val wp: String,
+                       val rh: Int, val pre_pro: Int, val uv_level: String, val cloud_cover: String,
+                       val ws_desc: String, val wd_desc: String, val sunrise: String,
+                       val sunset: String, val moonphase: String)
+
+@SuppressLint("UnsafeOptInUsageError")
+@Serializable
+data class WeatherListData(val list: List<WeatherData>)
+
+fun parseWeatherData(json: String): WeatherData?{
+    return Json.decodeFromString(WeatherData.serializer(), json)
+}
+
+class WeatherDayItem(val dataList: MutableList<WeatherDayData>) : ItemModel{
+
+}
+
+class WeatherHourItem(val dataList: MutableList<WeatherHourData>): ItemModel{
+
+}
+
+class Tip(val tipText: String = ""): ItemModel{
+
+}
 interface ItemModel
-fun parseWeatherHourData(json: String): WeatherHourData{
-    return Json.decodeFromString(WeatherHourData.serializer(), json)
-}
-
-fun parseWeatherDayData(json: String): WeatherDayData{
-    return Json.decodeFromString(WeatherDayData.serializer(), json)
-}
-
-class WeatherDayItem : ItemModel{
-    val dataList: MutableList<WeatherDayData> = mutableListOf()
-}
-
-class WeatherHourItem: ItemModel{
-    val dataList: MutableList<WeatherHourData> = mutableListOf()
-}
-
-class Tip: ItemModel{
-    val tipText: String = ""
-}

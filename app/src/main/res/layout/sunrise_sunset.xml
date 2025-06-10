@@ -3,19 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="200dp"
+    android:background="#29D6FA"
     tools:context=".MainActivity">
 
     <com.example.weather.SunriseSunset
         android:id="@+id/sunriseSunset"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="match_parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:lineColor="#FF0000"
         app:sunColor="#FFFF00"
         app:timeTextColor="#0000FF"
         app:timeTextSize="30sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:background="#29D6FA"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

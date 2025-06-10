@@ -29,12 +29,43 @@ object HttpClient {
         return url
     }
     fun getDayWeatherUrl(token: String, city: String = ""): String{
-        return ""
+        val location: Location?
+        var url = "https://api.open.geovisearth.com/v2/cn/city/basic?location="
+        if (city.isEmpty()){
+            location = LocationService.getLastKnownLocation()
+            if (location == null){
+                Log.e("HttpClient", "getDayWeatherUrl error, location is null")
+                return ""
+            } else {
+                url += "${location.longitude}.${location.latitude}&token=$token"
+            }
+        } else {
+            TODO()
+        }
+        return url
     }
 
-    fun getHourWeatherData(token: String, callback: (String?) -> Unit, city: String = ""){
+    fun getHourWeatherData(token: String, city: String, callback: (String?) -> Unit){
         val request = Request.Builder()
             .url(getHourWeatherUrl(token, city))
+            .build()
+        HttpClient.client.newCall(request).enqueue(object : Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                callback(null)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (!response.isSuccessful){
+                    callback(null)
+                    return
+                }
+                callback(response.body?.string())
+            }
+        })
+    }
+    fun getDayWeatherData(token: String, city: String, callback: (String?) -> Unit){
+        val request = Request.Builder()
+            .url(getDayWeatherUrl(token, city))
             .build()
         HttpClient.client.newCall(request).enqueue(object : Callback{
             override fun onFailure(call: Call, e: IOException) {

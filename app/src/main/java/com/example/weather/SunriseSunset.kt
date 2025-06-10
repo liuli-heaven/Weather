@@ -76,8 +76,8 @@ class SunriseSunset @JvmOverloads constructor(
             strokeWidth = 3f
             pathEffect = DashPathEffect(floatArrayOf(20f, 15f), 20f)
         }
-        mSunriseBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_sunrise)
-        mSunsetBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_sunset)
+        mSunriseBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_sun)
+        mSunsetBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_sun)
         mSunPaint.colorFilter = PorterDuffColorFilter(sunColor, PorterDuff.Mode.SRC_ATOP)
 
         mTimePaint = Paint().apply {

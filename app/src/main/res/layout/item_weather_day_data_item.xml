@@ -2,12 +2,15 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="16dp"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent">
+    android:layout_height="200dp"
+    android:background="#00A4FD">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#00A4FD">
 
         <TextView
             android:id="@+id/dateText"
@@ -16,7 +19,8 @@
             android:text="星期一"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@android:color/transparent"/>
 
         <TextView
             android:id="@+id/weekText"
@@ -25,16 +29,18 @@
             android:text="7月7日"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dateText" />
+            app:layout_constraintTop_toBottomOf="@+id/dateText"
+            android:background="@android:color/transparent"/>
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/weekText"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@tools:sample/avatars"
+            android:background="@android:color/transparent"/>
 
         <TextView
             android:id="@+id/conditionText"
@@ -43,7 +49,8 @@
             android:text="晴"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            android:background="@android:color/transparent"/>
 
         <TextView
             android:id="@+id/highTemperatureText"
@@ -52,12 +59,15 @@
             android:text="21℃"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/conditionText" />
+            app:layout_constraintTop_toBottomOf="@+id/conditionText"
+            android:background="@android:color/transparent"/>
+
         <TextView
             android:id="@+id/lowTemperatureText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="8℃"
+            android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/highTemperatureText" />

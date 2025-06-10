@@ -2,13 +2,17 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#4EBEFB">
+        android:background="#00A4FD">
 
         <TextView
             android:id="@+id/uvLevelText"
@@ -21,14 +25,17 @@
             app:layout_constraintTop_toTopOf="@+id/progressBar"
             app:layout_constraintVertical_bias="0.75" />
 
-        <ProgressBar
+        <SeekBar
             android:id="@+id/progressBar"
-            style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
+            style="@android:style/Widget.ProgressBar.Large"
             android:layout_width="125dp"
-            android:layout_height="116dp"
+            android:layout_height="125dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:rotation="115"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="40"
+            android:rotation="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
