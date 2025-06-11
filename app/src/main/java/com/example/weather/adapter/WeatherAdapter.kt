@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class WeatherAdapter(private val items: MutableList<ItemModel>):
+class WeatherAdapter(val items: MutableList<ItemModel>):
     RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     companion object{
@@ -48,7 +48,9 @@ class WeatherAdapter(private val items: MutableList<ItemModel>):
             else -> ERROR
         }
     }
-
+    fun getItem(position: Int): ItemModel {
+        return items[position]
+    }
     override fun getItemCount(): Int {
         return items.size
     }

@@ -42,6 +42,7 @@ object LocationService: LocationListener {
     }
 
     fun getLastKnownLocation(): Location? {
+
         return lastLocation
     }
 

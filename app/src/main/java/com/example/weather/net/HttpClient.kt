@@ -24,7 +24,7 @@ object HttpClient {
                 url += "${location.longitude}.${location.latitude}&token=$token"
             }
         } else {
-            TODO()
+
         }
         return url
     }
@@ -40,7 +40,7 @@ object HttpClient {
                 url += "${location.longitude}.${location.latitude}&token=$token"
             }
         } else {
-            TODO()
+
         }
         return url
     }

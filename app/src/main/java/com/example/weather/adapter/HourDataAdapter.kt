@@ -30,8 +30,8 @@ class HourDataAdapter(private val items: MutableList<WeatherHourData>):
         private val currentTemperatureText: TextView = itemView.findViewById(R.id.currentTemperatureText)
 
         fun bind(hourData: WeatherHourData){
-            timeText.text = hourData.time
-            currentTemperatureText.text = hourData.temperature.toString()
+            timeText.text = hourData.fc_time
+            currentTemperatureText.text = hourData.tem.toString()
         }
     }
 }

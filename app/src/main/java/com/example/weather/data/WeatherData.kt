@@ -1,26 +1,25 @@
 package com.example.weather.data
 
 import android.annotation.SuppressLint
-import android.content.ClipData.Item
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
-import java.util.Date
 
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class Temperature(
     val lowTemperature: Int,
     val highTemperature: Int
 )
-
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class WeatherHourData(
-    val condition: String,
-    val temperature: Int,
-    val time: String
+    val wp: String,
+    val tem: Int,
+    val fc_time: String,
+    val city: String
 )
 
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class WeatherDayData(
     val dateTemperature: Temperature,
@@ -29,6 +28,7 @@ data class WeatherDayData(
     val week: String
 )
 
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class WeatherCurrentData(
     val cityName: String,
@@ -37,6 +37,7 @@ data class WeatherCurrentData(
     val condition: String
 ): ItemModel
 
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class EnvironmentPram(
     val rh: Int,            //相对湿度， 单位：%
@@ -61,11 +62,11 @@ data class WeatherData(val status: Int, val fc_time: String,
                        val tem_max: Int, val tem_min: Int, val week: String, val wp: String,
                        val rh: Int, val pre_pro: Int, val uv_level: String, val cloud_cover: String,
                        val ws_desc: String, val wd_desc: String, val sunrise: String,
-                       val sunset: String, val moonphase: String)
+                       val sunset: String, val moonphase: String) : ItemModel
 
 @SuppressLint("UnsafeOptInUsageError")
 @Serializable
-data class WeatherListData(val list: List<WeatherData>)
+data class WeatherListData(val list: MutableList<WeatherData>) : ItemModel
 
 fun parseWeatherData(json: String): WeatherData?{
     return Json.decodeFromString(WeatherData.serializer(), json)
@@ -74,7 +75,8 @@ fun parseWeatherData(json: String): WeatherData?{
 class WeatherDayItem(val dataList: MutableList<WeatherDayData>) : ItemModel{
 
 }
-
+@SuppressLint("UnsafeOptInUsageError")
+@Serializable
 class WeatherHourItem(val dataList: MutableList<WeatherHourData>): ItemModel{
 
 }
