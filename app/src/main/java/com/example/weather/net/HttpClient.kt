@@ -1,7 +1,15 @@
 package com.example.weather.net
 
+import android.content.Context
 import android.location.Location
 import android.util.Log
+import android.widget.Toast
+import androidx.annotation.RestrictTo
+import androidx.annotation.UiContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -12,50 +20,59 @@ import java.io.IOException
 object HttpClient {
     val client = OkHttpClient()
 
-    fun getHourWeatherUrl(token: String, city: String = ""): String{
-        val location: Location?
+    fun getHourWeatherUrl(context: Context, token: String, city: String = ""): String{
         var url = "https://api.open.geovisearth.com/v2/cn/hourly/basic?location="
         if (city.isEmpty()){
-            location = LocationService.getLastKnownLocation()
-            if (location == null){
-                Log.e("HttpClient", "getHourWeatherUrl error, location is null")
-                return ""
+            val location = LocationService.getCurrentLocation(context)
+            if (location != null){
+                url += "${location.first},${location.second}&token=$token"
             } else {
-                url += "${location.longitude}.${location.latitude}&token=$token"
+                Log.e("HttpClient", "getHourWeatherUrl error, location is null")
             }
-        } else {
 
+        } else {
+            val location =  LocationService.getLocationFromCityName(context, city)
+            if (location != null){
+                url += "${location.first},${location.second}&token=$token"
+            } else {
+                Log.e("HttpClient", "getHourWeatherUrl error, city name is error")
+            }
         }
         return url
     }
-    fun getDayWeatherUrl(token: String, city: String = ""): String{
-        val location: Location?
+    fun getDayWeatherUrl(context: Context, token: String, city: String = ""): String{
         var url = "https://api.open.geovisearth.com/v2/cn/city/basic?location="
         if (city.isEmpty()){
-            location = LocationService.getLastKnownLocation()
-            if (location == null){
-                Log.e("HttpClient", "getDayWeatherUrl error, location is null")
-                return ""
-            } else {
-                url += "${location.longitude}.${location.latitude}&token=$token"
-            }
+             val location = LocationService.getCurrentLocation(context)
+             if (location != null){
+                 url += "${location.first},${location.second}&token=$token"
+             } else {
+                 Log.e("HttpClient", "getHourWeatherUrl error, location is null")
+             }
         } else {
-
+            val location =  LocationService.getLocationFromCityName(context, city)
+            if (location != null){
+                url += "${location.first},${location.second}&token=$token"
+            } else {
+                Log.e("HttpClient", "getHourWeatherUrl error, city name is error")
+            }
         }
         return url
     }
 
-    fun getHourWeatherData(token: String, city: String, callback: (String?) -> Unit){
+    fun getHourWeatherData(context: Context, token: String, city: String, callback: (String?) -> Unit){
         val request = Request.Builder()
-            .url(getHourWeatherUrl(token, city))
+            .url(getHourWeatherUrl(context, token, city))
             .build()
-        HttpClient.client.newCall(request).enqueue(object : Callback{
+        client.newCall(request).enqueue(object : Callback{
             override fun onFailure(call: Call, e: IOException) {
+                Toast.makeText(context, "网络请求失败", Toast.LENGTH_SHORT).show()
                 callback(null)
             }
 
             override fun onResponse(call: Call, response: Response) {
                 if (!response.isSuccessful){
+                    Toast.makeText(context, "网络请求失败", Toast.LENGTH_SHORT).show()
                     callback(null)
                     return
                 }
@@ -63,17 +80,19 @@ object HttpClient {
             }
         })
     }
-    fun getDayWeatherData(token: String, city: String, callback: (String?) -> Unit){
+    fun getDayWeatherData(context: Context, token: String, city: String, callback: (String?) -> Unit){
         val request = Request.Builder()
-            .url(getDayWeatherUrl(token, city))
+            .url(getDayWeatherUrl(context, token, city))
             .build()
-        HttpClient.client.newCall(request).enqueue(object : Callback{
+        client.newCall(request).enqueue(object : Callback{
             override fun onFailure(call: Call, e: IOException) {
+                Toast.makeText(context, "网络请求失败", Toast.LENGTH_SHORT).show()
                 callback(null)
             }
 
             override fun onResponse(call: Call, response: Response) {
                 if (!response.isSuccessful){
+                    Toast.makeText(context, "网络请求失败", Toast.LENGTH_SHORT).show()
                     callback(null)
                     return
                 }

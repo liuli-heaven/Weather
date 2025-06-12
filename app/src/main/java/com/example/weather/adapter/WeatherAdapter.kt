@@ -156,7 +156,7 @@ class WeatherAdapter(val items: MutableList<ItemModel>):
         fun bind(item: EnvironmentPram){
             rhText.text = item.rh.toString()
             preproText.text = item.pre_pro.toString()
-            uvLevelText.text = item.uv_level
+            uvLevelText.text = item.uv_level.toString()
             cloudText.text = item.cloud_cover
             wsDescText.text = item.ws_desc
             wdDescText.text = item.wd_desc

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import com.example.weather.net.HttpClient
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
@@ -20,7 +21,7 @@ interface WeatherDataCallback{
 
 class DatabaseHelper(val context: Context): SQLiteOpenHelper(context, "weather.db", null, 1) {
     private var callback: WeatherDataCallback? = null
-
+    val jsonDecoder = Json {ignoreUnknownKeys = true}
     override fun onCreate(db: SQLiteDatabase) {
         //创建日天气数据表
         db.execSQL("""
@@ -67,7 +68,7 @@ class DatabaseHelper(val context: Context): SQLiteOpenHelper(context, "weather.d
 
     private fun saveWeatherDay(month: Int, date: Int, city: String,
                                 dateTemperature: Temperature, week: String, condition: String,
-                                rh: Int, prePro: Int, uvLevel: String, cloudCover: String,
+                                rh: Int, prePro: Int, uvLevel: Int, cloudCover: String,
                                 wsDesc: String, wdDesc: String, sunRise: String,
                                 sunSet: String, moonPhase: String){
         val db = this.writableDatabase
@@ -137,7 +138,7 @@ class DatabaseHelper(val context: Context): SQLiteOpenHelper(context, "weather.d
         if(cursor.moveToFirst()){
             val rh = cursor.getInt(cursor.getColumnIndex("rh"))
             val prePro = cursor.getInt(cursor.getColumnIndex("pre_pro"))
-            val uvLevel = cursor.getString(cursor.getColumnIndex("uv_level"))
+            val uvLevel = cursor.getInt(cursor.getColumnIndex("uv_level"))
             val cloudCover = cursor.getString(cursor.getColumnIndex("cloud_cover"))
             val wsDesc = cursor.getString(cursor.getColumnIndex("ws_desc"))
             val wdDesc = cursor.getString(cursor.getColumnIndex("wd_desc"))
@@ -232,7 +233,7 @@ class DatabaseHelper(val context: Context): SQLiteOpenHelper(context, "weather.d
                 val condition = cursor.getString(cursor.getColumnIndex("condition"))
                 val rh = cursor.getInt(cursor.getColumnIndex("rh"))
                 val prePro = cursor.getInt(cursor.getColumnIndex("pre_pro"))
-                val uvLevel = cursor.getString(cursor.getColumnIndex("uv_level"))
+                val uvLevel = cursor.getInt(cursor.getColumnIndex("uv_level"))
                 val cloudCover = cursor.getString(cursor.getColumnIndex("cloud_cover"))
                 val wsDesc = cursor.getString(cursor.getColumnIndex("ws_desc"))
                 val wdDesc = cursor.getString(cursor.getColumnIndex("wd_desc"))
@@ -240,13 +241,13 @@ class DatabaseHelper(val context: Context): SQLiteOpenHelper(context, "weather.d
                 val sunSet = cursor.getString(cursor.getColumnIndex("sunset"))
                 val moonPhase = cursor.getString(cursor.getColumnIndex("moon_phase"))
                 val fc_time = "${LocalDateTime.now().year}$month$date"
-                weatherListData.list.add(WeatherData(0, fc_time, highTemperature, lowTemperature, week, condition,
+                weatherListData.dataList.add(WeatherData(0, fc_time, highTemperature, lowTemperature, week, condition,
                         rh, prePro, uvLevel, cloudCover, wsDesc, wdDesc, sunRise, sunSet, moonPhase))
-                if (weatherListData.list.size == 15) break
+                if (weatherListData.dataList.size == 15) break
             } while (cursor.moveToNext())
         }
         cursor.close()
-        if (weatherListData.list.size < 15){
+        if (weatherListData.dataList.size < 15){
             var nextMonth: Int
             if (month == 12) nextMonth = 1
             else nextMonth = month + 1
@@ -263,7 +264,7 @@ class DatabaseHelper(val context: Context): SQLiteOpenHelper(context, "weather.d
                     val condition = cursor.getString(cursor.getColumnIndex("condition"))
                     val rh = cursor.getInt(cursor.getColumnIndex("rh"))
                     val prePro = cursor.getInt(cursor.getColumnIndex("pre_pro"))
-                    val uvLevel = cursor.getString(cursor.getColumnIndex("uv_level"))
+                    val uvLevel = cursor.getInt(cursor.getColumnIndex("uv_level"))
                     val cloudCover = cursor.getString(cursor.getColumnIndex("cloud_cover"))
                     val wsDesc = cursor.getString(cursor.getColumnIndex("ws_desc"))
                     val wdDesc = cursor.getString(cursor.getColumnIndex("wd_desc"))
@@ -271,9 +272,9 @@ class DatabaseHelper(val context: Context): SQLiteOpenHelper(context, "weather.d
                     val sunSet = cursor.getString(cursor.getColumnIndex("sunset"))
                     val moonPhase = cursor.getString(cursor.getColumnIndex("moon_phase"))
                     val fc_time = "${LocalDateTime.now().year}$month$date"
-                    weatherListData.list.add(WeatherData(0, fc_time, highTemperature, lowTemperature, week, condition,
+                    weatherListData.dataList.add(WeatherData(0, fc_time, highTemperature, lowTemperature, week, condition,
                         rh, prePro, uvLevel, cloudCover, wsDesc, wdDesc, sunRise, sunSet, moonPhase))
-                    if (weatherListData.list.size == 15) break
+                    if (weatherListData.dataList.size == 15) break
                 } while (cursor.moveToNext())
             }
             cursor.close()
@@ -287,24 +288,23 @@ class DatabaseHelper(val context: Context): SQLiteOpenHelper(context, "weather.d
         val weatherDayItem = queryWeatherDay(city, now.month.value, now.dayOfMonth)
         var nowTemperature: Temperature? = null
         var nextTemperature: Temperature? = null
-        if (weatherDayItem.list.isEmpty() || weatherDayItem.list.size < 15){
-            HttpClient.getDayWeatherData(token, city){ json ->
+        if (weatherDayItem.dataList.isEmpty() || weatherDayItem.dataList.size < 15){
+            HttpClient.getDayWeatherData(context, token, city){ json ->
                 if (json != null){
                     val data = Json.parseToJsonElement(json)
                     if(data.jsonObject["result"] != null){
-                        val datas = data.jsonObject["result"].toString()
-
-                        val weatherData = Json.decodeFromString<WeatherListData>(WeatherListData.serializer(), datas)
+                        var datas = "{\"dataList\":${data.jsonObject["result"]?.jsonObject["datas"].toString()}}"
+                        val weatherData = jsonDecoder.decodeFromString<WeatherListData>(WeatherListData.serializer(), datas)
                         var count = 1
-                        for (data in weatherData.list){
+                        for (data in weatherData.dataList){
                             if (count == 1){
                                 nowTemperature = Temperature(data.tem_min, data.tem_max)
                             }
                             if (count == 2){
                                 nextTemperature = Temperature(data.tem_min, data.tem_max)
                             }
-                            val month = data.fc_time.substring(4, 5).toInt()
-                            val date = data.fc_time.substring(6, 7).toInt()
+                            val month = data.fc_time.substring(4, 6).toInt()
+                            val date = data.fc_time.substring(6, 8).toInt()
                             count++
                             saveWeatherDay(month, date, city, Temperature(data.tem_min, data.tem_max),
                                 data.week, data.wp, data.rh, data.pre_pro, data.uv_level,
@@ -315,6 +315,8 @@ class DatabaseHelper(val context: Context): SQLiteOpenHelper(context, "weather.d
                             callback?.drawDayData(weatherData)
                         }
                     }
+                } else {
+                    Toast.makeText(context, "获取天气信息失败", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
@@ -322,15 +324,16 @@ class DatabaseHelper(val context: Context): SQLiteOpenHelper(context, "weather.d
         }
         val weatherHourItem = queryWeatherHour(city, now.dayOfMonth)
         if (weatherHourItem.dataList.isEmpty() || weatherHourItem.dataList.size < 24){
-            HttpClient.getHourWeatherData(token, city) { json ->
+            HttpClient.getHourWeatherData(context, token, city) { json ->
                 if (json != null){
                     val data = Json.parseToJsonElement(json)
                     if (data.jsonObject["result"] != null){
-                        val datas = data.jsonObject["result"].toString()
-                        val weatherHourData = Json.decodeFromString<WeatherHourItem>(WeatherHourItem.serializer(), datas)
+                        var datas = "{\"dataList\":${data.jsonObject["result"]?.jsonObject["datas"].toString()}}"
+
+                        val weatherHourData = jsonDecoder.decodeFromString<WeatherHourItem>(WeatherHourItem.serializer(), datas)
                         for(elem in weatherHourData.dataList){
                             val hour = elem.fc_time.substring(8).toInt()
-                            val date = elem.fc_time.substring(6, 7).toInt()
+                            val date = elem.fc_time.substring(6, 8).toInt()
                             if (date == now.dayOfMonth){
                                 saveWeatherHour(date, hour, city, elem.tem, nowTemperature, elem.wp)
                             } else {
@@ -345,6 +348,8 @@ class DatabaseHelper(val context: Context): SQLiteOpenHelper(context, "weather.d
                             callback?.drawHourData(weatherHourData, nowTemperature)
                         }
                     }
+                } else {
+                    Toast.makeText(context, "获取天气信息失败", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {

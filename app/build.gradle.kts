@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.weather"
-        minSdk = 28
+        minSdk = 30
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -58,6 +58,8 @@ dependencies {
     implementation ("org.bouncycastle:bcprov-jdk15on:1.70")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("androidx.compose.material3:material3:1.3.0-beta05")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.cardview)

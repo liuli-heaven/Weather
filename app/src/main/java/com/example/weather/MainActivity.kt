@@ -1,26 +1,17 @@
 package com.example.weather
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.PreviewActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weather.adapter.DayDataAdapter
-import com.example.weather.adapter.HourDataAdapter
 import com.example.weather.adapter.WeatherAdapter
 import com.example.weather.data.DatabaseHelper
 import com.example.weather.data.EnvironmentPram
-import com.example.weather.data.ItemModel
 import com.example.weather.data.SunData
 import com.example.weather.data.Temperature
 import com.example.weather.data.Tip
@@ -31,13 +22,10 @@ import com.example.weather.data.WeatherDayItem
 import com.example.weather.data.WeatherHourData
 import com.example.weather.data.WeatherHourItem
 import com.example.weather.data.WeatherListData
-import com.example.weather.net.HttpClient
 
 class MainActivity : ComponentActivity(), WeatherDataCallback {
     lateinit var recyclerView: RecyclerView
     val db = DatabaseHelper(this)
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,14 +50,14 @@ class MainActivity : ComponentActivity(), WeatherDataCallback {
             Tip("近日天气"),
             WeatherDayItem(dayItems),
             Tip("环境质量"),
-            EnvironmentPram(20, 20, "0级", "30", "四级", "东南风"),
+            EnvironmentPram(20, 20, 0, "30", "四级", "东南风"),
             Tip("日出日落"),
             SunData("6:00", "18:00", "渐盈凸月")
         )
         val adapter = WeatherAdapter(items)
         recyclerView.adapter = adapter
 
-
+        db.queryWeather("5d4091c3910057d608e1feda5e55168e")
 
     }
 
@@ -78,12 +66,12 @@ class MainActivity : ComponentActivity(), WeatherDataCallback {
         val adapter = recyclerView.adapter as WeatherAdapter
         val dayList =  adapter.items[3] as WeatherDayItem
         dayList.dataList.clear()
-        for (data in weatherListData.list){
-            val date = "${data.fc_time.substring(4, 5)}月${data.fc_time.substring(6)}日"
+        for (data in weatherListData.dataList){
+            val date = "${data.fc_time.substring(4, 6)}月${data.fc_time.substring(6)}日"
             dayList.dataList.add(WeatherDayData(Temperature(data.tem_min, data.tem_max), date, data.wp, data.week))
         }
 
-        val firstData = weatherListData.list[0]
+        val firstData = weatherListData.dataList[0]
         adapter.items[5] = EnvironmentPram(firstData.rh, firstData.pre_pro, firstData.uv_level, firstData.cloud_cover,
             firstData.ws_desc, firstData.wd_desc)
         adapter.items[7] = SunData(firstData.sunrise, firstData.sunset, firstData.moonphase)

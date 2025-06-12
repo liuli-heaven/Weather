@@ -42,7 +42,7 @@ data class WeatherCurrentData(
 data class EnvironmentPram(
     val rh: Int,            //相对湿度， 单位：%
     val pre_pro: Int,       //降水概率， 单位：%
-    val uv_level: String,   //紫外线级别
+    val uv_level: Int,   //紫外线级别
     val cloud_cover: String,//云量，单位：%
     val ws_desc: String,    //风力
     val wd_desc: String     //风向
@@ -60,13 +60,13 @@ data class SunData(
 @Serializable
 data class WeatherData(val status: Int, val fc_time: String,
                        val tem_max: Int, val tem_min: Int, val week: String, val wp: String,
-                       val rh: Int, val pre_pro: Int, val uv_level: String, val cloud_cover: String,
+                       val rh: Int, val pre_pro: Int, val uv_level: Int, val cloud_cover: String,
                        val ws_desc: String, val wd_desc: String, val sunrise: String,
                        val sunset: String, val moonphase: String) : ItemModel
 
 @SuppressLint("UnsafeOptInUsageError")
 @Serializable
-data class WeatherListData(val list: MutableList<WeatherData>) : ItemModel
+data class WeatherListData(val dataList: MutableList<WeatherData>) : ItemModel
 
 fun parseWeatherData(json: String): WeatherData?{
     return Json.decodeFromString(WeatherData.serializer(), json)
